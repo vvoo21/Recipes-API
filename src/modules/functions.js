@@ -1,5 +1,11 @@
 import { selectCategories, result } from './variables.js';
 
+export const cleanHTML = (selector) => {
+  while (selector.firstChild) {
+    selector.removeChild(selector.firstChild);
+  }
+}
+
 export const showCategories = (categories) => {
   categories.forEach(category => {
     const option = document.createElement('OPTION');
@@ -13,15 +19,31 @@ export const getCategories = () => {
   const url = 'https://www.themealdb.com/api/json/v1/1/categories.php';
 
   fetch(url)
-    .then( response => response.json())
+    .then(response => response.json())
     .then(data => showCategories(data.categories))
     .catch(error => error);
 }
 
+export const showRecipeModal = (recipe) => {
+  console.log(recipe);
+}
+
+export const getRecipeId = (id) => {
+  const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => showRecipeModal(data.meals[0]))
+    .catch(error => error);
+}
+
 export const showRecipes = (recipes) => {
+
+  cleanHTML(result);
+
   recipes.forEach(recipe => {
     const { strMeal, strMealThumb, idMeal } = recipe;
-    
+
     const recipeContainer = document.createElement('DIV');
     recipeContainer.classList.add('col-md-4');
 
@@ -43,6 +65,11 @@ export const showRecipes = (recipes) => {
     const seeRecipeBtn = document.createElement('BUTTON');
     seeRecipeBtn.classList.add('btn', 'btn-danger', 'w-100');
     seeRecipeBtn.textContent = 'See recipe';
+    // seeRecipeBtn.dataset.bsTarget = "#modal";
+    // seeRecipeBtn.dataset.bsToggle = "modal";
+    seeRecipeBtn.onclick = function() {
+      getRecipeId(idMeal)
+    }
 
     recipeCardBody.appendChild(recipeHeading);
     recipeCardBody.appendChild(seeRecipeBtn);
@@ -62,7 +89,7 @@ export const selectCategory = (e) => {
   const url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
 
   fetch(url)
-    .then( response => response.json())
+    .then(response => response.json())
     .then(data => showRecipes(data.meals))
     .catch(error => error);
 }
