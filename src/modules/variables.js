@@ -1,0 +1,1 @@
+export const selectCategories = document.querySelector('#categories');
