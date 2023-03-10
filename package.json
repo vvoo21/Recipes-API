@@ -1,0 +1,48 @@
+{
+  "name": "recipes-api",
+  "version": "1.0.0",
+  "description": "In this project, you can search for recipes according to their category and see a recipe for a dish by calling an API. You can save the recipe as a favorite; for this, we will use LocalStorage.",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack serve --open",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vvoo21/Recipes-API.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vvoo21/Recipes-API/issues"
+  },
+  "homepage": "https://github.com/vvoo21/Recipes-API#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^9.1.0",
+    "css-loader": "^6.7.2",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.27.5",
+    "hint": "^7.1.3",
+    "html-loader": "^4.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "js-loader": "^0.1.1",
+    "source-map-loader": "^4.0.1",
+    "style-loader": "^3.3.1",
+    "stylelint": "^13.13.1",
+    "stylelint-config-standard": "^21.0.0",
+    "stylelint-csstree-validator": "^1.9.0",
+    "stylelint-scss": "^3.21.0",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.0",
+    "webpack-dev-server": "^4.11.1"
+  },
+  "dependencies": {
+    "bootstrap": "^5.2.3",
+    "lodash": "^4.17.21"
+  },
+  "main": "webpack.config.js"
+}
