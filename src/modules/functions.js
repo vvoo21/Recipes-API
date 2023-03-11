@@ -1,4 +1,10 @@
 import { selectCategories, result } from './variables.js';
+import bootstrap from 'bootstrap/dist/js/bootstrap';
+
+window.bootstrap = bootstrap;
+
+const modal = new bootstrap.Modal('#modal', {});
+
 
 export const cleanHTML = (selector) => {
   while (selector.firstChild) {
@@ -25,7 +31,73 @@ export const getCategories = () => {
 }
 
 export const showRecipeModal = (recipe) => {
-  console.log(recipe);
+
+  const { idMeal, strMeal, strInstructions, strMealThumb } = recipe;
+
+  const modalTitle = document.querySelector('.modal .modal-title');
+  const modalBody = document.querySelector('.modal .modal-body');
+  const modalFooter = document.querySelector('.modal-footer');
+
+  cleanHTML(modalBody);
+  cleanHTML(modalFooter);
+
+  modalTitle.textContent = strMeal;
+
+  const modalImg = document.createElement('IMG');
+  modalImg.classList.add('img-fluid');
+  modalImg.alt = `Recipe ${strMeal}`;
+  modalImg.src = strMealThumb;
+  modalBody.appendChild(modalImg);
+
+  const modalInstructions = document.createElement('H3');
+  modalInstructions.classList.add('my-3');
+  modalInstructions.textContent = 'Instructions';
+  modalBody.appendChild(modalInstructions);
+
+  const modalInstructionsTxt = document.createElement('P');
+  modalInstructionsTxt.textContent = strInstructions;
+  modalBody.appendChild(modalInstructionsTxt);
+
+  const IngredientMeasure = document.createElement('H3');
+  IngredientMeasure.classList.add('my-3');
+  IngredientMeasure.textContent = 'Ingredients and amounts';
+  modalBody.appendChild(IngredientMeasure);
+
+  const listGroup = document.createElement('UL');
+  listGroup.classList.add('list-group');
+  modalBody.appendChild(listGroup);
+
+  for (let i = 1; i <= 20; i++) {
+    if (recipe[`strIngredient${i}`]) {
+      const ingredient = recipe[`strIngredient${i}`];
+      const measure = recipe[`strMeasure${i}`];
+
+      const ingredientLi = document.createElement('LI');
+      ingredientLi.classList.add('list-group-item');
+      ingredientLi.innerHTML = `${ingredient} - ${measure}`
+
+      listGroup.appendChild(ingredientLi);
+    }
+  }
+
+  const btnFavorite = document.createElement('BUTTON');
+  btnFavorite.setAttribute('type', 'button');
+  btnFavorite.classList.add('btn', 'btn-danger', 'col');
+  btnFavorite.textContent = 'Add to favorite';
+  modalFooter.appendChild(btnFavorite);
+
+  const btnCloseModal = document.createElement('BUTTON');
+  btnCloseModal.setAttribute('type', 'button');
+  btnCloseModal.classList.add('btn', 'btn-secondary', 'col');
+  btnCloseModal.textContent = 'Close';
+  btnCloseModal.onclick = () => {
+    modal.hide();
+  }
+  modalFooter.appendChild(btnCloseModal);
+
+
+  //show modal
+  modal.show();
 }
 
 export const getRecipeId = (id) => {
