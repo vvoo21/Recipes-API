@@ -1,38 +1,36 @@
+import bootstrap from 'bootstrap/dist/js/bootstrap.js';
 import { selectCategories, result } from './variables.js';
-import bootstrap from 'bootstrap/dist/js/bootstrap';
 
 window.bootstrap = bootstrap;
 
 const modal = new bootstrap.Modal('#modal', {});
 
-
 export const cleanHTML = (selector) => {
   while (selector.firstChild) {
     selector.removeChild(selector.firstChild);
   }
-}
+};
 
 export const showCategories = (categories) => {
-  categories.forEach(category => {
+  categories.forEach((category) => {
     const option = document.createElement('OPTION');
     option.value = category.strCategory;
     option.textContent = category.strCategory;
     selectCategories.appendChild(option);
   });
-}
+};
 
 export const getCategories = () => {
   const url = 'https://www.themealdb.com/api/json/v1/1/categories.php';
 
   fetch(url)
-    .then(response => response.json())
-    .then(data => showCategories(data.categories))
-    .catch(error => error);
-}
+    .then((response) => response.json())
+    .then((data) => showCategories(data.categories))
+    .catch((error) => error);
+};
 
 export const showRecipeModal = (recipe) => {
-
-  const { idMeal, strMeal, strInstructions, strMealThumb } = recipe;
+  const { strMeal, strInstructions, strMealThumb } = recipe;
 
   const modalTitle = document.querySelector('.modal .modal-title');
   const modalBody = document.querySelector('.modal .modal-body');
@@ -67,14 +65,14 @@ export const showRecipeModal = (recipe) => {
   listGroup.classList.add('list-group');
   modalBody.appendChild(listGroup);
 
-  for (let i = 1; i <= 20; i++) {
+  for (let i = 1; i <= 20; i += 1) {
     if (recipe[`strIngredient${i}`]) {
       const ingredient = recipe[`strIngredient${i}`];
       const measure = recipe[`strMeasure${i}`];
 
       const ingredientLi = document.createElement('LI');
       ingredientLi.classList.add('list-group-item');
-      ingredientLi.innerHTML = `${ingredient} - ${measure}`
+      ingredientLi.innerHTML = `${ingredient} - ${measure}`;
 
       listGroup.appendChild(ingredientLi);
     }
@@ -92,28 +90,26 @@ export const showRecipeModal = (recipe) => {
   btnCloseModal.textContent = 'Close';
   btnCloseModal.onclick = () => {
     modal.hide();
-  }
+  };
   modalFooter.appendChild(btnCloseModal);
 
-
-  //show modal
+  // show modal
   modal.show();
-}
+};
 
 export const getRecipeId = (id) => {
-  const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
+  const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
 
   fetch(url)
-    .then(response => response.json())
-    .then(data => showRecipeModal(data.meals[0]))
-    .catch(error => error);
-}
+    .then((response) => response.json())
+    .then((data) => showRecipeModal(data.meals[0]))
+    .catch((error) => error);
+};
 
 export const showRecipes = (recipes) => {
-
   cleanHTML(result);
 
-  recipes.forEach(recipe => {
+  recipes.forEach((recipe) => {
     const { strMeal, strMealThumb, idMeal } = recipe;
 
     const recipeContainer = document.createElement('DIV');
@@ -139,9 +135,9 @@ export const showRecipes = (recipes) => {
     seeRecipeBtn.textContent = 'See recipe';
     // seeRecipeBtn.dataset.bsTarget = "#modal";
     // seeRecipeBtn.dataset.bsToggle = "modal";
-    seeRecipeBtn.onclick = function() {
-      getRecipeId(idMeal)
-    }
+    seeRecipeBtn.onclick = () => {
+      getRecipeId(idMeal);
+    };
 
     recipeCardBody.appendChild(recipeHeading);
     recipeCardBody.appendChild(seeRecipeBtn);
@@ -151,9 +147,9 @@ export const showRecipes = (recipes) => {
 
     recipeContainer.appendChild(recipeCard);
 
-    result.appendChild(recipeContainer)
+    result.appendChild(recipeContainer);
   });
-}
+};
 
 export const selectCategory = (e) => {
   const category = e.target.value;
@@ -161,7 +157,7 @@ export const selectCategory = (e) => {
   const url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
 
   fetch(url)
-    .then(response => response.json())
-    .then(data => showRecipes(data.meals))
-    .catch(error => error);
-}
+    .then((response) => response.json())
+    .then((data) => showRecipes(data.meals))
+    .catch((error) => error);
+};

@@ -5,4 +5,4 @@ import { selectCategories } from './modules/variables.js';
 
 document.addEventListener('DOMContentLoaded', getCategories);
 
-selectCategories.addEventListener('change', selectCategory)
+selectCategories.addEventListener('change', selectCategory);
