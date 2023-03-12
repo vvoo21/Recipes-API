@@ -1,5 +1,6 @@
 export const selectCategories = document.querySelector('#categories');
-export const result = document.querySelector('#result');
+export const result = document.querySelector('.result');
+export const favoritesDiv = document.querySelector('#result-favorites');
 
 // Sections
 export const favoritesSection = document.querySelector('.favorites-section');
