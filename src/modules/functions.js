@@ -1,14 +1,50 @@
 import bootstrap from 'bootstrap/dist/js/bootstrap.js';
-import { selectCategories, result } from './variables.js';
+import {
+  selectCategories, result, homeSection, favoritesSection,
+} from './variables.js';
 
 window.bootstrap = bootstrap;
 
 const modal = new bootstrap.Modal('#modal', {});
 
+export const showHome = () => {
+  homeSection.style.display = 'block';
+  favoritesSection.style.display = 'none';
+};
+
+export const showFavorites = () => {
+  homeSection.style.display = 'none';
+  favoritesSection.style.display = 'block';
+};
+
 export const cleanHTML = (selector) => {
   while (selector.firstChild) {
     selector.removeChild(selector.firstChild);
   }
+};
+
+export const addFavorite = (recipe) => {
+  const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
+  localStorage.setItem('favorites', JSON.stringify([...favorites, recipe]));
+};
+
+export const existStorage = (id) => {
+  const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
+  return favorites.some((favorite) => favorite.id === id);
+};
+
+export const deleteFavorite = (id) => {
+  const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
+  const newFavorites = favorites.filter((favorite) => favorite.id !== id);
+  localStorage.setItem('favorites', JSON.stringify(newFavorites));
+};
+
+export const showToast = (message) => {
+  const toastDiv = document.querySelector('#toast');
+  const toastBody = document.querySelector('.toast-body');
+  const toast = new bootstrap.Toast(toastDiv);
+  toastBody.textContent = message;
+  toast.show();
 };
 
 export const showCategories = (categories) => {
@@ -30,7 +66,9 @@ export const getCategories = () => {
 };
 
 export const showRecipeModal = (recipe) => {
-  const { strMeal, strInstructions, strMealThumb } = recipe;
+  const {
+    strMeal, strInstructions, strMealThumb, idMeal,
+  } = recipe;
 
   const modalTitle = document.querySelector('.modal .modal-title');
   const modalBody = document.querySelector('.modal .modal-body');
@@ -81,7 +119,25 @@ export const showRecipeModal = (recipe) => {
   const btnFavorite = document.createElement('BUTTON');
   btnFavorite.setAttribute('type', 'button');
   btnFavorite.classList.add('btn', 'btn-danger', 'col');
-  btnFavorite.textContent = 'Add to favorite';
+  btnFavorite.textContent = existStorage(idMeal) ? 'Delete favorite' : 'Add to favorite';
+
+  btnFavorite.onclick = () => {
+    if (existStorage(idMeal)) {
+      deleteFavorite(idMeal);
+      btnFavorite.textContent = 'Add to favorite';
+      showToast('Deleted Successfully');
+      return;
+    }
+
+    addFavorite({
+      id: idMeal,
+      title: strMeal,
+      img: strMealThumb,
+    });
+    btnFavorite.textContent = 'Delete favorite';
+    showToast('Added Successfully');
+  };
+
   modalFooter.appendChild(btnFavorite);
 
   const btnCloseModal = document.createElement('BUTTON');
@@ -97,7 +153,7 @@ export const showRecipeModal = (recipe) => {
   modal.show();
 };
 
-export const getRecipeId = (id) => {
+export const getRecipeModal = (id) => {
   const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
 
   fetch(url)
@@ -106,7 +162,7 @@ export const getRecipeId = (id) => {
     .catch((error) => error);
 };
 
-export const showRecipes = (recipes) => {
+export const showRecipesByCategory = (recipes) => {
   cleanHTML(result);
 
   recipes.forEach((recipe) => {
@@ -133,10 +189,8 @@ export const showRecipes = (recipes) => {
     const seeRecipeBtn = document.createElement('BUTTON');
     seeRecipeBtn.classList.add('btn', 'btn-danger', 'w-100');
     seeRecipeBtn.textContent = 'See recipe';
-    // seeRecipeBtn.dataset.bsTarget = "#modal";
-    // seeRecipeBtn.dataset.bsToggle = "modal";
     seeRecipeBtn.onclick = () => {
-      getRecipeId(idMeal);
+      getRecipeModal(idMeal);
     };
 
     recipeCardBody.appendChild(recipeHeading);
@@ -158,6 +212,6 @@ export const selectCategory = (e) => {
 
   fetch(url)
     .then((response) => response.json())
-    .then((data) => showRecipes(data.meals))
+    .then((data) => showRecipesByCategory(data.meals))
     .catch((error) => error);
 };
