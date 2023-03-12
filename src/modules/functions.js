@@ -1,6 +1,6 @@
 import bootstrap from 'bootstrap/dist/js/bootstrap.js';
 import {
-  selectCategories, result, homeSection, favoritesSection, favoritesDiv
+  selectCategories, result, favoritesDiv,
 } from './variables.js';
 
 window.bootstrap = bootstrap;
@@ -213,48 +213,48 @@ export const getFavorites = () => {
     cleanHTML(result);
 
     favorites.forEach((recipe) => {
-    const { id, title, img } = recipe;
+      const { id, title, img } = recipe;
 
-    const recipeContainer = document.createElement('DIV');
-    recipeContainer.classList.add('col-md-4');
+      const recipeContainer = document.createElement('DIV');
+      recipeContainer.classList.add('col-md-4');
 
-    const recipeCard = document.createElement('DIV');
-    recipeCard.classList.add('card', 'mb-4');
+      const recipeCard = document.createElement('DIV');
+      recipeCard.classList.add('card', 'mb-4');
 
-    const recipeImg = document.createElement('IMG');
-    recipeImg.classList.add('card-img-top');
-    recipeImg.alt = `Recipe Image ${img}`;
-    recipeImg.src = img;
+      const recipeImg = document.createElement('IMG');
+      recipeImg.classList.add('card-img-top');
+      recipeImg.alt = `Recipe Image ${img}`;
+      recipeImg.src = img;
 
-    const recipeCardBody = document.createElement('DIV');
-    recipeCardBody.classList.add('card-body');
+      const recipeCardBody = document.createElement('DIV');
+      recipeCardBody.classList.add('card-body');
 
-    const recipeHeading = document.createElement('H3');
-    recipeHeading.classList.add('card-title', 'mb-3');
-    recipeHeading.textContent = title;
+      const recipeHeading = document.createElement('H3');
+      recipeHeading.classList.add('card-title', 'mb-3');
+      recipeHeading.textContent = title;
 
-    const seeRecipeBtn = document.createElement('BUTTON');
-    seeRecipeBtn.classList.add('btn', 'btn-danger', 'w-100');
-    seeRecipeBtn.textContent = 'See recipe';
-    seeRecipeBtn.onclick = () => {
-      getRecipeModal(id);
-    };
+      const seeRecipeBtn = document.createElement('BUTTON');
+      seeRecipeBtn.classList.add('btn', 'btn-danger', 'w-100');
+      seeRecipeBtn.textContent = 'See recipe';
+      seeRecipeBtn.onclick = () => {
+        getRecipeModal(id);
+      };
 
-    recipeCardBody.appendChild(recipeHeading);
-    recipeCardBody.appendChild(seeRecipeBtn);
+      recipeCardBody.appendChild(recipeHeading);
+      recipeCardBody.appendChild(seeRecipeBtn);
 
-    recipeCard.appendChild(recipeImg);
-    recipeCard.appendChild(recipeCardBody);
+      recipeCard.appendChild(recipeImg);
+      recipeCard.appendChild(recipeCardBody);
 
-    recipeContainer.appendChild(recipeCard);
+      recipeContainer.appendChild(recipeCard);
 
-    favoritesDiv.appendChild(recipeContainer);
-  });
-    return
+      favoritesDiv.appendChild(recipeContainer);
+    });
+    return;
   }
 
   const noFavorites = document.createElement('P');
   noFavorites.classList.add('fs-4', 'text-center', 'font-bold', 'mt-5');
   noFavorites.textContent = 'No favorites yet';
   favoritesDiv.appendChild(noFavorites);
-}
+};
